@@ -133,3 +133,5 @@ default-*checkpoint.ipynb
 
 # data
 data/
+*.ipynb
+.vscode
