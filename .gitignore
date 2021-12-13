@@ -132,6 +132,8 @@ dmypy.json
 default-*checkpoint.ipynb
 
 # data
-data/
-*.ipynb
+data_raw/
+data_preprocessed/
+
+# *.ipynb
 .vscode
