@@ -4,6 +4,7 @@ import pandas as pd
 from itertools import cycle
 
 from process_ad_data import get_flat_info
+from get_stats_waw import get_price_size_category
 
 st.title("Am I overpaying for that flat? Probably.")
 st.warning("Not an investment advice. I am just a project for a programming portfolio. Don't listen to me.")
@@ -26,11 +27,13 @@ if len(chosen_flat_link) > 0:
     flat_info = get_flat_info(chosen_flat_link)
     st.write(flat_info)
 
-    # st.image(flat_info['photos_links'], use_column_width=True)
+    category_price = get_price_size_category(flat_info)
+
+    st.write(f"Category price: {category_price}")
 
     filteredImages = flat_info['photos_links']
 
 
-cols = cycle(st.columns(3)) # st.columns here since it is out of beta at the time I'm writing this
-for idx, filteredImage in enumerate(filteredImages):
-    next(cols).image(filteredImage, use_column_width=True)
+    cols = cycle(st.columns(3)) # st.columns here since it is out of beta at the time I'm writing this
+    for idx, filteredImage in enumerate(filteredImages):
+        next(cols).image(filteredImage, use_column_width=True)
