@@ -2,6 +2,15 @@ import json
 from typing import Dict
 import requests
 from datetime import datetime
+import pandas as pd
+
+
+def get_link_price_history():
+    return "https://raw.githubusercontent.com/mbalcerzak/warsaw_flats_api/raspberry-updates/json_dir/latest_changes.json"
+
+
+def get_link_random_links():
+    return "https://raw.githubusercontent.com/mbalcerzak/warsaw_flats_api/raspberry-updates/json_dir/random_links.json"
 
 
 def get_json(link: str) -> int:
@@ -47,7 +56,7 @@ def get_price_size_category(flat: Dict = None) -> str:
     flat_area_category = assign_area_category(flat['flat_area'])
     flat_month_num = get_month_num(flat['date_scraped'])
 
-    print(flat_area_category, flat_month_num, flat_location)
+    # print(flat_area_category, flat_month_num, flat_location)
     for elem in price_m_loc_area_cat:
         # print(elem)
         if elem['location'] == flat_location:
@@ -56,11 +65,23 @@ def get_price_size_category(flat: Dict = None) -> str:
                     return elem['avg_price_per_m']
 
 
-def get_price_history(ad_id: str = None) -> Dict:
-    link_price_history = "https://raw.githubusercontent.com/mbalcerzak/warsaw_flats_api/raspberry-updates/json_dir/latest_changes.json"
+def get_price_history() -> Dict:
+    link_price_history = get_link_price_history()
     data = get_json(link_price_history)
+    return data
 
-    return data[ad_id]
+
+def get_flat_price_history(ad_id: str) -> pd.DataFrame:
+    data = get_price_history()
+    plot_data = pd.DataFrame.from_dict(data[ad_id], orient='index', columns=['Price'])
+    print(plot_data)
+    return plot_data
+
+
+def get_random_flat_links() -> list:
+    link = get_link_random_links()
+    data = get_json(link)
+    return list(data)
 
 
 if __name__ == "__main__":
@@ -74,6 +95,6 @@ if __name__ == "__main__":
             "date": '2022-01-01'
             }
 
-    print(get_price_size_category(flat))
+    # print(get_price_size_category(flat))
 
-    # print(get_price_history("10010275453741012520720209"))
+    # print(get_flat_price_history("10010275453741012520720209"))
